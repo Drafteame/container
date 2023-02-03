@@ -1,5 +1,7 @@
 # container
 
+![gopher-container](https://user-images.githubusercontent.com/9085902/216511169-b28f488e-1f9c-4a8e-8ec9-4cb90db1c25a.png)
+
 Flexible runtime dependency container inspired on go.uber.org/dig and based on reflection. It applies the dependency tree
 concept to make flexible injections.
 
