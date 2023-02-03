@@ -1,6 +1,6 @@
 module github.com/Drafteame/container
 
-go 1.20
+go 1.18
 
 require (
 	github.com/magefile/mage v1.14.0
