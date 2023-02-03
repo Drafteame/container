@@ -3,10 +3,12 @@ package container
 import (
 	"errors"
 	"fmt"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"github.com/Drafteame/container/dependency"
 	"github.com/Drafteame/container/types"
-	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestGet(t *testing.T) {

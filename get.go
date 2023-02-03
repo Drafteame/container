@@ -2,8 +2,9 @@ package container
 
 import (
 	"fmt"
-	"github.com/Drafteame/container/types"
 	"reflect"
+
+	"github.com/Drafteame/container/types"
 )
 
 // Get is a wrapper over the Get function attached to the global container. This function modify the return type of the
