@@ -1,0 +1,32 @@
+run:
+  timeout: 5m
+  skip-files:
+    - generated.*
+    - mage.*
+
+linters:
+  enable:
+    - asciicheck
+    - bodyclose
+    - depguard
+    - gocritic
+    - gofmt
+    - goimports
+    - goprintffuncname
+    - gosimple
+    - govet
+    - ineffassign
+    - misspell
+    - rowserrcheck
+    - staticcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unused
+    - whitespace
+    - errcheck
+  disable:
+    - unparam
+    - structcheck
+    - varcheck
+    - deadcode
