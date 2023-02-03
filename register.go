@@ -2,6 +2,7 @@ package container
 
 import (
 	"fmt"
+
 	"github.com/Drafteame/container/dependency"
 	"github.com/Drafteame/container/types"
 )
