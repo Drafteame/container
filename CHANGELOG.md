@@ -1,3 +1,12 @@
+## v0.2.1 (2023-02-03)
+
+
+- style: format imports (#5)
+- ci: fix release (#4)
+- * chore: remove idea files
+
+* ci: fix release pipeline
+
 ## v0.2.0 (2023-02-03)
 
 
