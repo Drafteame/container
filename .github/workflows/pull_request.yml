@@ -17,6 +17,11 @@ jobs:
         with:
           go-version: '1.18.x'
 
+      - name: Install cov deps
+        run: |
+          go install github.com/axw/gocov/gocov@latest
+          go install github.com/AlekSi/gocov-xml@latest
+
       - name: Config private packages
         run: git config --global url.https://${{ secrets.ACCESS_TOKEN }}@github.com/Drafteame.insteadOf https://github.com/Drafteame
 
@@ -41,11 +46,15 @@ jobs:
           version: latest
           args: test
 
+      - name: Convert out to xml
+        run: |
+          gocov convert coverage.out | gocov-xml > coverage.xml
+
       - name: Review coverage
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.out
+          files: ./coverage.xml
           fail_ci_if_error: true
           verbose: true
 

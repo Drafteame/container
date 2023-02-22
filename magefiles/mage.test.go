@@ -21,8 +21,13 @@ func Test() error {
 	return err
 }
 
-// Cover Show HTML coverage output.
-func Cover() error {
+// CoverHtml Show HTML coverage output.
+func CoverHtml() error {
 	mg.Deps(Test)
 	return sh.Run("go", "tool", "cover", "-html", "coverage.out")
+}
+
+func CoverXml() error {
+	mg.Deps(Test)
+	return sh.Run("go", "tool", "cover", "-o", "coverage.xml")
 }
