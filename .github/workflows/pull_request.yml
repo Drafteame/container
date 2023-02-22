@@ -10,44 +10,34 @@ jobs:
     name: 👍 Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.3.0
 
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: '1.18.x'
-
-      - name: Install cov deps
-        run: |
-          go install github.com/axw/gocov/gocov@latest
-          go install github.com/AlekSi/gocov-xml@latest
+          go-version: 1.20.x
 
       - name: Config private packages
         run: git config --global url.https://${{ secrets.ACCESS_TOKEN }}@github.com/Drafteame.insteadOf https://github.com/Drafteame
 
       - name: Checkout
-        uses: actions/checkout@v3
-
-      # Cache go build cache, used to speedup go test
-      - name: Go Build Cache
-        id: cache-go-mod
-        uses: actions/cache@v3
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+        uses: actions/checkout@v3.3.0
 
       - name: Install dependencies
-        if: steps.cache-go-mod.outputs.cache-hit != 'true'
         run: go mod download
 
+      - name: Set up gotestfmt
+        uses: gotesttools/gotestfmt-action@v2
+
       - name: Test
-        uses: magefile/mage-action@v2.3.0
-        with:
-          version: latest
-          args: test
+        run: |
+          set -euo pipefail
+          go test -json -v -race -cover -coverprofile=coverage.out ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
 
       - name: Convert out to xml
         run: |
+          go install github.com/axw/gocov/gocov@latest
+          go install github.com/AlekSi/gocov-xml@latest
           gocov convert coverage.out | gocov-xml > coverage.xml
 
       - name: Review coverage
@@ -55,7 +45,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           verbose: true
 
   lint:
@@ -68,7 +58,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.18.x
+          go-version: 1.20.x
 
       - name: Config private packages
         run: git config --global url.https://${{ secrets.ACCESS_TOKEN }}@github.com/Drafteame.insteadOf https://github.com/Drafteame
