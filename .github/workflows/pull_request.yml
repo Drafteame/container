@@ -9,16 +9,18 @@ jobs:
   test:
     name: 👍 Test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version: [ 1.18.x, 1.19.x, 1.20.x ]
     steps:
       - uses: actions/checkout@v3
 
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ matrix.version }}
+          go-version: '1.18.x'
+
+      - name: Install cov deps
+        run: |
+          go install github.com/axw/gocov/gocov@latest
+          go install github.com/AlekSi/gocov-xml@latest
 
       - name: Config private packages
         run: git config --global url.https://${{ secrets.ACCESS_TOKEN }}@github.com/Drafteame.insteadOf https://github.com/Drafteame
@@ -43,6 +45,18 @@ jobs:
         with:
           version: latest
           args: test
+
+      - name: Convert out to xml
+        run: |
+          gocov convert coverage.out | gocov-xml > coverage.xml
+
+      - name: Review coverage
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: true
+          verbose: true
 
   lint:
     name: 💅 Lint

@@ -15,14 +15,19 @@ func Generate() error {
 
 // Test Execute unit testing.
 func Test() error {
-	out, err := sh.Output("go", "test", "-v", "-race", "./...", "-cover", "-coverprofile=coverage.out")
+	out, err := sh.Output("go", "test", "-v", "-race", "./...", "-covermode=atomic", "-coverprofile=coverage.out")
 	fmt.Println(out)
 
 	return err
 }
 
-// Cover Show HTML coverage output.
-func Cover() error {
+// CoverHtml Show HTML coverage output.
+func CoverHtml() error {
 	mg.Deps(Test)
 	return sh.Run("go", "tool", "cover", "-html", "coverage.out")
+}
+
+func CoverXml() error {
+	mg.Deps(Test)
+	return sh.Run("go", "tool", "cover", "-o", "coverage.xml")
 }
