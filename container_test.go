@@ -238,6 +238,10 @@ func TestFunctionalRegistration(t *testing.T) {
 			db := MustGet[*sql.DB](databaseSymbol)
 			return newUserWithDB(db)
 		})
+		if err != nil {
+			t.Fatal(err)
+			return
+		}
 
 		userInstance := MustGet[*user](userSymbol)
 
