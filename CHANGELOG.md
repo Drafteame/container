@@ -1,3 +1,32 @@
+## v0.3.0 (2023-03-15)
+
+
+- build(deps): bump github.com/stretchr/testify from 1.8.1 to 1.8.2 (#7)
+- Bumps [github.com/stretchr/testify](https://github.com/stretchr/testify) from 1.8.1 to 1.8.2.
+- [Release notes](https://github.com/stretchr/testify/releases)
+- [Commits](https://github.com/stretchr/testify/compare/v1.8.1...v1.8.2)
+
+---
+updated-dependencies:
+- dependency-name: github.com/stretchr/testify
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+- ci: add code coverage check on pipeline (#6)
+- * ci: add code coverage check on pipeline
+
+* ci: update cover mode
+
+* ci: merge code cove to test
+
+* ci: add new test
+
+* ci: transform out to xml
+- docs: add gopher
+
 ## v0.2.1 (2023-02-03)
 
 
