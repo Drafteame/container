@@ -1,3 +1,17 @@
+## v0.3.1 (2023-03-15)
+
+
+- fix: linting (#8)
+- * ci: add code coverage check on pipeline
+
+* fix: linting rules using revive
+
+* fix: add coverage on main
+
+* ci: format test errors
+
+* fix: test error comparation
+
 ## v0.3.0 (2023-03-15)
 
 
