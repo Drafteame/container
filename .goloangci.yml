@@ -1,32 +1,68 @@
 run:
-  timeout: 5m
+  timeout: 2m
   skip-files:
     - generated.*
     - mage.*
 
 linters:
   enable:
-    - asciicheck
-    - bodyclose
-    - depguard
-    - gocritic
-    - gofmt
-    - goimports
-    - goprintffuncname
-    - gosimple
-    - govet
-    - ineffassign
-    - misspell
-    - rowserrcheck
-    - staticcheck
-    - stylecheck
-    - typecheck
-    - unconvert
-    - unused
-    - whitespace
-    - errcheck
-  disable:
-    - unparam
-    - structcheck
-    - varcheck
-    - deadcode
+    - revive
+
+linters-settings:
+  revive:
+    ignore-generated-header: true
+    severity: warning
+    confidence: 0.8
+    error-code: 0
+    warning-code: 0
+    rules:
+      - name: blank-imports
+      - name: context-as-argument
+      - name: context-keys-type
+      - name: dot-imports
+      - name: error-return
+      - name: error-strings
+      - name: error-naming
+      - name: exported
+      - name: if-return
+      - name: increment-decrement
+      - name: var-naming
+      - name: var-declaration
+      - name: package-comments
+      - name: range
+      - name: receiver-naming
+      - name: time-naming
+      - name: unexported-return
+      - name: indent-error-flow
+      - name: errorf
+      - name: empty-block
+      - name: superfluous-else
+      - name: unused-parameter
+      - name: unreachable-code
+      - name: redefines-builtin-id
+      - name: time-equal
+      - name: time-naming
+      - name: var-declaration
+      - name: errorf
+      - name: if-return
+      - name: var-naming
+      - name: range
+      - name: receiver-naming
+      - name: indent-error-flow
+      - name: superfluous-else
+      - name: confusing-naming
+      - name: unused-parameter
+      - name: unreachable-code
+      - name: add-constant
+      - name: unnecessary-stmt
+      - name: modifies-value-receiver
+      - name: redefines-builtin-id
+      - name: range-val-in-closure
+      - name: range-val-address
+      - name: empty-lines
+      - name: unhandled-error
+      - name: early-return
+      - name: unconditional-recursion
+      - name: use-any
+      - name: datarace
+      - name: comment-spacings

@@ -81,7 +81,7 @@ func (d Dependency) Build() (any, error) {
 
 	arg, err := d.getValueAndError(res)
 	if err != nil {
-		return nil, fmt.Errorf("inject: error constructing `%v`: %v", ctype, err)
+		return nil, fmt.Errorf("inject: error constructing `%v`: %w", ctype, err)
 	}
 
 	return arg, nil
