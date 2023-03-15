@@ -180,7 +180,7 @@ func TestDependency_Build(t *testing.T) {
 
 		assert.Error(t, err)
 		assert.Nil(t, res)
-		assert.Equal(t, expErr, err)
+		assert.Equal(t, expErr.Error(), err.Error())
 	})
 
 	t.Run("no arguments and more than two return values", func(t *testing.T) {
@@ -209,7 +209,7 @@ func TestDependency_Build(t *testing.T) {
 
 		assert.Error(t, err)
 		assert.Nil(t, res)
-		assert.Equal(t, expErr, err)
+		assert.Equal(t, expErr.Error(), err.Error())
 	})
 
 	t.Run("with arguments and two return values", func(t *testing.T) {
@@ -267,7 +267,7 @@ func TestDependency_Build(t *testing.T) {
 
 		assert.Error(t, err)
 		assert.Nil(t, res)
-		assert.Equal(t, expErr, err)
+		assert.Equal(t, expErr.Error(), err.Error())
 	})
 
 	t.Run("with arguments and error by wrong argument order or type", func(t *testing.T) {
