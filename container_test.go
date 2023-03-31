@@ -56,8 +56,7 @@ func TestInvoke(t *testing.T) {
 	dep := dependency.New(newUser, name, age)
 
 	if err := Register(depName, dep); err != nil {
-		t.Error(err)
-		return
+		t.Fatal(err)
 	}
 
 	type args struct {
@@ -123,15 +122,13 @@ func TestSingleton(t *testing.T) {
 		depName := "db"
 
 		if err := Singleton(depName, newDB); err != nil {
-			t.Error(err)
-			return
+			t.Fatal(err)
 		}
 
 		factoryName := "test"
 
 		if err := Singleton(factoryName, newUserWithDB, Inject(depName)); err != nil {
-			t.Error(err)
-			return
+			t.Fatal(err)
 		}
 	})
 
@@ -189,15 +186,13 @@ func TestRegister(t *testing.T) {
 		depName := "db"
 
 		if err := Register(depName, newDB); err != nil {
-			t.Error(err)
-			return
+			t.Fatal(err)
 		}
 
 		factoryName := "test"
 
 		if err := Register(factoryName, newUserWithDB, Inject(depName)); err != nil {
-			t.Error(err)
-			return
+			t.Fatal(err)
 		}
 	})
 
@@ -219,18 +214,15 @@ func TestFunctionalRegistration(t *testing.T) {
 		defer Flush()
 		defer func() {
 			if r := recover(); r != nil {
-				t.Error(r)
+				t.Fatal(r)
 			}
 		}()
 
 		const databaseSymbol = "database"
-		err := Register(databaseSymbol, func() *sql.DB {
-			return newDB()
-		})
+		err := Register(databaseSymbol, newDB)
 
 		if err != nil {
-			t.Error(err)
-			return
+			t.Fatal(err)
 		}
 
 		const userSymbol = "user"
@@ -240,7 +232,6 @@ func TestFunctionalRegistration(t *testing.T) {
 		})
 		if err != nil {
 			t.Fatal(err)
-			return
 		}
 
 		userInstance := MustGet[*user](userSymbol)
@@ -248,4 +239,22 @@ func TestFunctionalRegistration(t *testing.T) {
 		assert.NotEmpty(t, userInstance)
 		assert.NotNil(t, userInstance.db)
 	})
+}
+
+func TestRemove(t *testing.T) {
+	const depName = "test"
+
+	if err := Register(depName, newDB); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err := Get[any](depName)
+
+	assert.NoError(t, err)
+
+	Remove(depName)
+
+	_, err = Get[any](depName)
+
+	assert.Error(t, err)
 }

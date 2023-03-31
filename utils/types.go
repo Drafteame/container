@@ -18,7 +18,7 @@ func GetFirstReturnType(construct any) reflect.Type {
 
 // EmbedsType checks that the provided `elem` interface embeds the provided type `e` directly. If it does, return true,
 // otherwise return false.
-func EmbedsType(elem interface{}, e reflect.Type) bool {
+func EmbedsType(elem any, e reflect.Type) bool {
 	if elem == nil {
 		return false
 	}

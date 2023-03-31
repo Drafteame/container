@@ -70,7 +70,6 @@ func TestGet(t *testing.T) {
 	})
 }
 
-//nolint:funlen
 func TestMustGet(t *testing.T) {
 	t.Run("get instance of specific type by name", func(t *testing.T) {
 		defer Flush()

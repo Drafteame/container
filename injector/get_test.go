@@ -1,10 +1,12 @@
 package injector
 
 import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"github.com/Drafteame/container/dependency"
 	"github.com/Drafteame/container/types"
-	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestContainer_Get(t *testing.T) {
@@ -22,7 +24,7 @@ func TestContainer_Get(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	
+
 	obj, errGet := c.Get(sym)
 	if errGet != nil {
 		t.Fatal(errGet)

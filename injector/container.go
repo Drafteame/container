@@ -25,3 +25,10 @@ func (c *Container) Flush() {
 	c.solvedDeps = make(map[types.Symbol]any)
 	c.deps = make(map[types.Symbol]dependency.Dependency)
 }
+
+// Remove WARNING: This function will remove a specific factory and its solve dependency from the container. Do not use
+// this method on production, and just use it on testing purposes.
+func (c *Container) Remove(name types.Symbol) {
+	delete(c.solvedDeps, name)
+	delete(c.deps, name)
+}
