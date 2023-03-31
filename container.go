@@ -19,6 +19,7 @@ type Container interface {
 	Invoke(construct any) error
 	Get(name types.Symbol) (any, error)
 	Flush()
+	Remove(name types.Symbol)
 }
 
 // get return a global instance for the dependency injection container. If the container is nil, then it will initialize
@@ -49,4 +50,10 @@ func Invoke(construct any) error {
 // Do not use this method on production, and just use it for testing purposes.
 func Flush() {
 	get().Flush()
+}
+
+// Remove WARNING: This function will remove a specific factory and its solve dependency from the container. Do not use
+// this method on production, and just use it on testing purposes.
+func Remove[T symbolName](name T) {
+	get().Remove(types.Symbol(name))
 }

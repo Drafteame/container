@@ -53,33 +53,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.3.0
 
       - name: Install Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
           go-version: 1.20.x
 
       - name: Config private packages
         run: git config --global url.https://${{ secrets.ACCESS_TOKEN }}@github.com/Drafteame.insteadOf https://github.com/Drafteame
 
-      # Cache go build cache, used to speedup go test
-      - name: Go Build Cache
-        id: cache-go-mod
-        uses: actions/cache@v3
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
-
       - name: Install dependencies
-        if: steps.cache-go-mod.outputs.cache-hit != 'true'
         run: go mod download
 
-      - name: golint
-        uses: reviewdog/action-golangci-lint@v2
+      - name: Go vet
+        run: go vet ./...
+
+      - name: Run Linter
+        uses: morphy2k/revive-action@v2
         with:
-          golangci_lint_flags: '--disable-all -E golint'
-          level: warning
+          exclude: "magefiles/..."
+          config: revive.toml
 
   commit_lint:
     runs-on: ubuntu-latest
