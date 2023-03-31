@@ -1,3 +1,8 @@
+## v0.4.0 (2023-03-31)
+
+
+- feat: add Remove method for better testing (#10)
+
 ## v0.3.1 (2023-03-15)
 
 
