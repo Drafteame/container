@@ -16,7 +16,7 @@ func (c *Container) Get(name types.Symbol) (any, error) {
 		return nil, fmt.Errorf("inject: no provided dependency of name `%s`", name)
 	}
 
-	if dep.IsSingleton() {
+	if dep.IsSingleton() && !c.testMode {
 		return c.getSingleton(name, dep)
 	}
 
@@ -42,7 +42,7 @@ func (c *Container) getSingleton(name types.Symbol, dep dependency.Dependency) (
 func (c *Container) getInstance(dep dependency.Dependency) (any, error) {
 	val, err := dep.SetContainer(c).Build()
 	if err != nil {
-		return nil, fmt.Errorf("inject: error building dependency instance: %v", err)
+		return nil, fmt.Errorf("inject: error building dependency instance: %w", err)
 	}
 
 	return val, nil

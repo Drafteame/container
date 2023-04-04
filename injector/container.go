@@ -9,6 +9,7 @@ import (
 type Container struct {
 	solvedDeps map[types.Symbol]any
 	deps       map[types.Symbol]dependency.Dependency
+	testMode   bool
 }
 
 // New creates a new instance of a Container.
@@ -16,7 +17,14 @@ func New() *Container {
 	return &Container{
 		solvedDeps: make(map[types.Symbol]any),
 		deps:       make(map[types.Symbol]dependency.Dependency),
+		testMode:   false,
 	}
+}
+
+// TestMode WARNING: Sets testMode flag to true, bypassing singleton instance generation to avoid race conditions when
+// container is used on test cases.
+func (c *Container) TestMode() {
+	c.testMode = true
 }
 
 // Flush WARNING: This function will delete all saved instances, solved and registered factories from the container.

@@ -47,7 +47,7 @@ func TestGet(t *testing.T) {
 
 		assert.Error(t, err)
 		assert.Empty(t, ui)
-		assert.Equal(t, expErr, err)
+		assert.Equal(t, expErr.Error(), err.Error())
 	})
 
 	t.Run("cast type error", func(t *testing.T) {

@@ -315,7 +315,7 @@ func TestContainer_Invoke(t *testing.T) {
 		expErr := fmt.Errorf("inject: error building dependency instance: inject: error constructing `func() (*injector.user, error)`: some")
 
 		assert.Error(t, err)
-		assert.Equal(t, expErr, err)
+		assert.Equal(t, expErr.Error(), err.Error())
 	})
 
 	t.Run("invoke with shared dependency on multiple targets as singleton", func(t *testing.T) {
@@ -397,7 +397,7 @@ func TestContainer_Invoke(t *testing.T) {
 		expErr := errors.New("inject: error building dependency instance: inject: error resolving argument 0 for constructor func(injector.database) *injector.user: inject: error building dependency instance: inject: error constructing `func(string) (*injector.driver, error)`: some")
 
 		assert.Error(t, err)
-		assert.Equal(t, expErr, err)
+		assert.Equal(t, expErr.Error(), err.Error())
 	})
 
 	t.Run("invoke with shared dependency that does not exist", func(t *testing.T) {
@@ -431,6 +431,6 @@ func TestContainer_Invoke(t *testing.T) {
 		expErr := errors.New("inject: error building dependency instance: inject: error resolving argument 0 for constructor func(injector.database) *injector.user: inject: no provided dependency of name `algo`")
 
 		assert.Error(t, err)
-		assert.Equal(t, expErr, err)
+		assert.Equal(t, expErr.Error(), err.Error())
 	})
 }
