@@ -9,6 +9,15 @@ import (
 	"github.com/Drafteame/container/types"
 )
 
+func TestContainer_EnableTestMode(t *testing.T) {
+	ic := New()
+	assert.False(t, ic.testMode)
+
+	ic.TestMode()
+
+	assert.True(t, ic.testMode)
+}
+
 func TestContainer_Flush(t *testing.T) {
 	depName := "test"
 

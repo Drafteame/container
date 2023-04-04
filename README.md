@@ -7,7 +7,7 @@ concept to make flexible injections.
 
 ## Require
 
-- Go >= 1.18
+- Go >= 1.20
 
 ## Install
 

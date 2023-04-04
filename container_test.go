@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -257,4 +258,36 @@ func TestRemove(t *testing.T) {
 	_, err = Get[any](depName)
 
 	assert.Error(t, err)
+}
+
+func TestTestMode(t *testing.T) {
+	t.Run("get singleton instance on test mode", func(t *testing.T) {
+		TestMode()
+
+		type test struct {
+			number int
+		}
+
+		sym := types.Symbol("test")
+
+		err := Singleton(sym, func() test {
+			return test{number: rand.Int()}
+		})
+
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		obj1, errGet := Get[test](sym)
+		if errGet != nil {
+			t.Fatal(errGet)
+		}
+
+		obj2, errGet2 := Get[test](sym)
+		if errGet2 != nil {
+			t.Fatal(errGet2)
+		}
+
+		assert.NotEqual(t, obj1.number, obj2.number)
+	})
 }

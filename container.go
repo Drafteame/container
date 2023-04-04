@@ -20,6 +20,7 @@ type Container interface {
 	Get(name types.Symbol) (any, error)
 	Flush()
 	Remove(name types.Symbol)
+	TestMode()
 }
 
 // get return a global instance for the dependency injection container. If the container is nil, then it will initialize
@@ -56,4 +57,10 @@ func Flush() {
 // this method on production, and just use it on testing purposes.
 func Remove[T symbolName](name T) {
 	get().Remove(types.Symbol(name))
+}
+
+// TestMode WARNING: Sets testMode flag to true, bypassing singleton instance generation to avoid race conditions when
+// container is used on test cases.
+func TestMode() {
+	get().TestMode()
 }
