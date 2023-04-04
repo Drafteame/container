@@ -1,3 +1,22 @@
+## v0.5.0 (2023-04-04)
+
+
+- feat: add test mode to container (#11)
+- ci: bump actions/setup-go from 3 to 4 (#9)
+- Bumps [actions/setup-go](https://github.com/actions/setup-go) from 3 to 4.
+- [Release notes](https://github.com/actions/setup-go/releases)
+- [Commits](https://github.com/actions/setup-go/compare/v3...v4)
+
+---
+updated-dependencies:
+- dependency-name: actions/setup-go
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+
 ## v0.4.0 (2023-03-31)
 
 
