@@ -1,3 +1,22 @@
+## v0.6.0 (2024-04-18)
+
+
+- build(deps): bump github.com/magefile/mage from 1.14.0 to 1.15.0 (#12)
+- Bumps [github.com/magefile/mage](https://github.com/magefile/mage) from 1.14.0 to 1.15.0.
+- [Release notes](https://github.com/magefile/mage/releases)
+- [Changelog](https://github.com/magefile/mage/blob/master/.goreleaser.yml)
+- [Commits](https://github.com/magefile/mage/compare/v1.14.0...v1.15.0)
+
+---
+updated-dependencies:
+- dependency-name: github.com/magefile/mage
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+
 ## v0.5.0 (2023-04-04)
 
 
