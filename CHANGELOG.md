@@ -1,3 +1,11 @@
+## v0.7.1 (2024-04-18)
+
+
+- chore: refactor deps (#15)
+- * chore: refactor dependencies
+
+* ci: modify precommit and mage commands
+
 ## v0.7.0 (2024-04-18)
 
 
