@@ -26,6 +26,7 @@ node_modules/
 # Extra files
 .DS_Store
 
-# Test local files
+# local files
 config.yml
+go.work.sum
 dist/
