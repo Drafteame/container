@@ -16,7 +16,9 @@ func Generate() error {
 // Test Execute unit testing.
 func Test() error {
 	out, err := sh.Output("go", "test", "-v", "-race", "./...", "-covermode=atomic", "-coverprofile=coverage.out")
-	fmt.Println(out)
+	if out != "" {
+		fmt.Println(out)
+	}
 
 	return err
 }

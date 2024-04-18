@@ -15,7 +15,9 @@ func Vet() error {
 
 	out, err := sh.Output(command, args...)
 
-	fmt.Println(out)
+	if out != "" {
+		fmt.Println(out)
+	}
 
 	return err
 }
@@ -29,14 +31,20 @@ func Lint() error {
 
 	out, err := sh.Output(command, args...)
 
-	fmt.Println(out)
+	if out != "" {
+		fmt.Println(out)
+	}
+
 	return err
 }
 
 // Format Runs gofmt over the code.
 func Format() error {
 	out, err := sh.Output("goimports-reviser", "-format", "./...")
-	fmt.Println(out)
+
+	if out != "" {
+		fmt.Println(out)
+	}
 
 	return err
 }

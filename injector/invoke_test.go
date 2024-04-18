@@ -145,7 +145,7 @@ func TestContainer_Invoke(t *testing.T) {
 			UserService userer `inject:""`
 		}
 
-		invoker := func(in args) {}
+		invoker := func(args) {}
 
 		err := inject.Invoke(invoker)
 		expErr := errors.New("inject: missing name tag of inject dependency on field `UserService`")
@@ -181,7 +181,7 @@ func TestContainer_Invoke(t *testing.T) {
 
 		type args struct{}
 
-		invoker := func(in args) {}
+		invoker := func(args) {}
 
 		err := inject.Invoke(invoker)
 
@@ -200,7 +200,7 @@ func TestContainer_Invoke(t *testing.T) {
 
 		called := false
 
-		invoker := func(in args) bool {
+		invoker := func(args) bool {
 			called = true
 			return called
 		}
@@ -220,7 +220,7 @@ func TestContainer_Invoke(t *testing.T) {
 
 		called := false
 
-		invoker := func(in args) error {
+		invoker := func(args) error {
 			called = true
 			return nil
 		}
@@ -241,7 +241,7 @@ func TestContainer_Invoke(t *testing.T) {
 		called := false
 		expErr := fmt.Errorf("invoke with invoker returning nil error value")
 
-		invoker := func(in args) error {
+		invoker := func(args) error {
 			called = true
 			return expErr
 		}
@@ -265,7 +265,7 @@ func TestContainer_Invoke(t *testing.T) {
 			UserService some
 		}
 
-		invoker := func(in args) {}
+		invoker := func(args) {}
 
 		err := inject.Invoke(invoker)
 
@@ -283,7 +283,7 @@ func TestContainer_Invoke(t *testing.T) {
 			UserService *user `inject:"name=usersService"`
 		}
 
-		invoker := func(in args) {}
+		invoker := func(args) {}
 
 		err := inject.Invoke(invoker)
 
@@ -308,7 +308,7 @@ func TestContainer_Invoke(t *testing.T) {
 			UserService *user `inject:"name=depName"`
 		}
 
-		invoker := func(in args) {}
+		invoker := func(args) {}
 
 		err := inject.Invoke(invoker)
 
@@ -373,7 +373,7 @@ func TestContainer_Invoke(t *testing.T) {
 		errBuild := errors.New("some")
 
 		sharedDepName := types.Symbol("driver")
-		sharedDep := dependency.NewSingleton(func(dbname string) (*driver, error) { return nil, errBuild }, dbName)
+		sharedDep := dependency.NewSingleton(func(string) (*driver, error) { return nil, errBuild }, dbName)
 		if err := inject.Provide(sharedDepName, sharedDep); err != nil {
 			t.Error(err)
 			return
@@ -391,7 +391,7 @@ func TestContainer_Invoke(t *testing.T) {
 			UserRepo *user `inject:"name=usersRepo"`
 		}
 
-		invoker := func(in args) {}
+		invoker := func(args) {}
 
 		err := inject.Invoke(invoker)
 		expErr := errors.New("inject: error building dependency instance: inject: error resolving argument 0 for constructor func(injector.database) *injector.user: inject: error building dependency instance: inject: error constructing `func(string) (*injector.driver, error)`: some")
@@ -424,7 +424,7 @@ func TestContainer_Invoke(t *testing.T) {
 			UserRepo *user `inject:"name=usersRepo"`
 		}
 
-		invoker := func(in args) {}
+		invoker := func(args) {}
 
 		err := inject.Invoke(invoker)
 

@@ -11,6 +11,9 @@ repos:
     hooks:
       - id: go-mod-tidy
       - id: goimports-reviser
+        args: [ "-excludes=bin,node_modules,tmp,.git" ]
+      - id: revive
+        args: [ "-config=revive.toml", "-formatter=friendly" ]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
@@ -23,8 +26,3 @@ repos:
     hooks:
       - id: commitizen
         stages: [commit-msg]
-
-  - repo: https://github.com/tekwizely/pre-commit-golang
-    rev: v1.0.0-rc.1
-    hooks:
-      - id: go-revive-repo-mod

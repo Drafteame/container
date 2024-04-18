@@ -1,6 +1,8 @@
 package utils
 
-import "reflect"
+import (
+	"reflect"
+)
 
 // WhereErrorOut it tries to find from the reflected type of function callback, if this call back has any return error
 // value and if it does, what's the index of the return value where the error comes from. If the function has more than
