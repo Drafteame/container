@@ -1,3 +1,22 @@
+## v0.7.0 (2024-04-18)
+
+
+- build(deps): bump github.com/stretchr/testify from 1.8.2 to 1.8.4 (#14)
+- Bumps [github.com/stretchr/testify](https://github.com/stretchr/testify) from 1.8.2 to 1.8.4.
+- [Release notes](https://github.com/stretchr/testify/releases)
+- [Commits](https://github.com/stretchr/testify/compare/v1.8.2...v1.8.4)
+
+---
+updated-dependencies:
+- dependency-name: github.com/stretchr/testify
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Co-authored-by: Eduardo Aguilar Yépez <dante.aguilar41@gmail.com>
+
 ## v0.6.0 (2024-04-18)
 
 
