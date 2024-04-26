@@ -260,6 +260,29 @@ func TestRemove(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestOverride(t *testing.T) {
+	const depName = "test"
+	defer Flush()
+
+	if err := Register(depName, func() int { return 10 }); err != nil {
+		t.Fatal(err)
+	}
+
+	v, err := Get[any](depName)
+
+	assert.NoError(t, err)
+	assert.Equal(t, 10, v)
+
+	if err = Override(depName, func() int { return 20 }); err != nil {
+		t.Fatal(err)
+	}
+
+	v, err = Get[any](depName)
+
+	assert.NoError(t, err)
+	assert.Equal(t, 20, v)
+}
+
 func TestTestMode(t *testing.T) {
 	t.Run("get singleton instance on test mode", func(t *testing.T) {
 		TestMode()

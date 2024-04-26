@@ -64,3 +64,31 @@ func TestContainer_Remove(t *testing.T) {
 	assert.Empty(t, c.deps)
 	assert.Empty(t, c.solvedDeps)
 }
+
+func TestContainer_Override(t *testing.T) {
+	depName := types.Symbol("test")
+
+	c := New()
+
+	if err := c.Provide(depName, dependency.NewSingleton(func() int { return 10 })); err != nil {
+		t.Fatal(err)
+	}
+
+	v, err := c.Get(depName)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, 10, v)
+
+	if err = c.Override(depName, dependency.NewSingleton(func() int { return 20 })); err != nil {
+		t.Fatal(err)
+	}
+
+	v, err = c.Get(depName)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, 20, v)
+}
