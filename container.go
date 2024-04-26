@@ -16,6 +16,7 @@ type symbolName interface {
 // injected when
 type Container interface {
 	Provide(name types.Symbol, dep dependency.Dependency) error
+	Override(name types.Symbol, dep dependency.Dependency) error
 	Invoke(construct any) error
 	Get(name types.Symbol) (any, error)
 	Flush()
