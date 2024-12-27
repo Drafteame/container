@@ -1,3 +1,61 @@
+## v0.7.3 (2024-12-27)
+
+
+- deps: bump github.com/stretchr/testify from 1.9.0 to 1.10.0 (#20)
+- Bumps [github.com/stretchr/testify](https://github.com/stretchr/testify) from 1.9.0 to 1.10.0.
+- [Release notes](https://github.com/stretchr/testify/releases)
+- [Commits](https://github.com/stretchr/testify/compare/v1.9.0...v1.10.0)
+- ---
+updated-dependencies:
+- dependency-name: github.com/stretchr/testify
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+...
+- Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+- ci: bump goreleaser/goreleaser-action from 5 to 6 (#19)
+- Bumps [goreleaser/goreleaser-action](https://github.com/goreleaser/goreleaser-action) from 5 to 6.
+- [Release notes](https://github.com/goreleaser/goreleaser-action/releases)
+- [Commits](https://github.com/goreleaser/goreleaser-action/compare/v5...v6)
+
+---
+updated-dependencies:
+- dependency-name: goreleaser/goreleaser-action
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+- ci: bump goreleaser/goreleaser-action from 4 to 5 (#17)
+- Bumps [goreleaser/goreleaser-action](https://github.com/goreleaser/goreleaser-action) from 4 to 5.
+- [Release notes](https://github.com/goreleaser/goreleaser-action/releases)
+- [Commits](https://github.com/goreleaser/goreleaser-action/compare/v4...v5)
+
+---
+updated-dependencies:
+- dependency-name: goreleaser/goreleaser-action
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+- ci: bump actions/setup-python from 4 to 5 (#16)
+- Bumps [actions/setup-python](https://github.com/actions/setup-python) from 4 to 5.
+- [Release notes](https://github.com/actions/setup-python/releases)
+- [Commits](https://github.com/actions/setup-python/compare/v4...v5)
+
+---
+updated-dependencies:
+- dependency-name: actions/setup-python
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+
 ## v0.7.2 (2024-04-26)
 
 
