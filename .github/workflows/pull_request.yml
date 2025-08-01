@@ -8,14 +8,14 @@ on:
 jobs:
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Golang with cache
         uses: magnetikonline/action-golang-cache@v5
         with:
-          go-version: 1.20.x
+          go-version: 1.22.x
 
       - name: Install dependencies
         run: |
@@ -27,7 +27,7 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,7 +35,7 @@ jobs:
       - name: Setup Golang with cache
         uses: magnetikonline/action-golang-cache@v5
         with:
-          go-version: 1.20.x
+          go-version: 1.22.x
 
       - name: Install dependencies
         run: go mod download
@@ -50,7 +50,7 @@ jobs:
           config: revive.toml
 
   commit_lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -61,7 +61,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install Commitizen
         run: pip install -U commitizen
