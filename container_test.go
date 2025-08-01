@@ -4,19 +4,17 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	"github.com/Drafteame/container/dependency"
 	"github.com/Drafteame/container/injector"
-	"github.com/Drafteame/container/types"
 )
 
 const name = "John"
-
 const age = 21
+const factoryName = "test"
 
 type user struct {
 	name string
@@ -50,53 +48,17 @@ func TestNew(t *testing.T) {
 	assert.Implements(t, new(Container), ic)
 }
 
-func TestInvoke(t *testing.T) {
-	defer Flush()
-
-	depName := types.Symbol("userTest")
-	dep := dependency.New(newUser, name, age)
-
-	if err := Register(depName, dep); err != nil {
-		t.Fatal(err)
-	}
-
-	type args struct {
-		types.In
-		User *user `inject:"name=userTest"`
-	}
-
-	called := false
-
-	invoker := func(in args) {
-		if assert.NotNil(t, in.User) {
-			assert.Equal(t, in.User.age, age)
-			assert.Equal(t, in.User.name, name)
-		}
-
-		called = true
-	}
-
-	err := Invoke(invoker)
-
-	assert.NoError(t, err)
-	assert.True(t, called)
-}
-
 func TestSingleton(t *testing.T) {
 	t.Run("should register a raw factory singleton instance", func(t *testing.T) {
-		defer Flush()
+		t.Cleanup(Flush)
 
-		factoryName := "test"
-
-		err := Singleton(factoryName, newUser, name, age)
+		err := Singleton(factoryName, newUser, WithArgs(name, age))
 
 		assert.NoError(t, err)
 	})
 
 	t.Run("should register a singleton from singleton dependency", func(t *testing.T) {
-		defer Flush()
-
-		factoryName := "test"
+		t.Cleanup(Flush)
 
 		dep := dependency.NewSingleton(newUser, name, age)
 
@@ -106,9 +68,7 @@ func TestSingleton(t *testing.T) {
 	})
 
 	t.Run("should register a singleton from dependency", func(t *testing.T) {
-		defer Flush()
-
-		factoryName := "test"
+		t.Cleanup(Flush)
 
 		dep := dependency.New(newUser, name, age)
 
@@ -118,23 +78,19 @@ func TestSingleton(t *testing.T) {
 	})
 
 	t.Run("should register a singleton from raw function and nested dependencies", func(t *testing.T) {
-		defer Flush()
+		t.Cleanup(Flush)
 
-		depName := "db"
-
-		if err := Singleton(depName, newDB); err != nil {
+		if err := Singleton("db", newDB); err != nil {
 			t.Fatal(err)
 		}
 
-		factoryName := "test"
-
-		if err := Singleton(factoryName, newUserWithDB, Inject(depName)); err != nil {
+		if err := Singleton(factoryName, newUserWithDB, WithArgs(Inject(depName))); err != nil {
 			t.Fatal(err)
 		}
 	})
 
 	t.Run("error when no dependency.Depdndendency instance or raw function is registered", func(t *testing.T) {
-		defer Flush()
+		t.Cleanup(Flush)
 
 		err := Singleton("name", dependency.Injectable{})
 
@@ -148,19 +104,15 @@ func TestSingleton(t *testing.T) {
 
 func TestRegister(t *testing.T) {
 	t.Run("should register a raw factory instance", func(t *testing.T) {
-		defer Flush()
+		t.Cleanup(Flush)
 
-		factoryName := "test"
-
-		err := Register(factoryName, newUser, name, age)
+		err := Register(factoryName, newUser, WithArgs(name, age))
 
 		assert.NoError(t, err)
 	})
 
 	t.Run("should register a singleton from singleton dependency", func(t *testing.T) {
-		defer Flush()
-
-		factoryName := "test"
+		t.Cleanup(Flush)
 
 		dep := dependency.NewSingleton(newUser, name, age)
 
@@ -170,9 +122,7 @@ func TestRegister(t *testing.T) {
 	})
 
 	t.Run("should register a singleton from dependency", func(t *testing.T) {
-		defer Flush()
-
-		factoryName := "test"
+		t.Cleanup(Flush)
 
 		dep := dependency.New(newUser, name, age)
 
@@ -182,23 +132,19 @@ func TestRegister(t *testing.T) {
 	})
 
 	t.Run("should register a singleton from raw function and nested dependencies", func(t *testing.T) {
-		defer Flush()
+		t.Cleanup(Flush)
 
-		depName := "db"
-
-		if err := Register(depName, newDB); err != nil {
+		if err := Register("db", newDB); err != nil {
 			t.Fatal(err)
 		}
 
-		factoryName := "test"
-
-		if err := Register(factoryName, newUserWithDB, Inject(depName)); err != nil {
+		if err := Register(factoryName, newUserWithDB, WithArgs(Inject(depName))); err != nil {
 			t.Fatal(err)
 		}
 	})
 
 	t.Run("error when no dependency.Dependency instance or raw function is registered", func(t *testing.T) {
-		defer Flush()
+		t.Cleanup(Flush)
 
 		err := Register("name", dependency.Injectable{})
 
@@ -212,7 +158,7 @@ func TestRegister(t *testing.T) {
 
 func TestFunctionalRegistration(t *testing.T) {
 	t.Run("non singleton instance", func(t *testing.T) {
-		defer Flush()
+		t.Cleanup(Flush)
 		defer func() {
 			if r := recover(); r != nil {
 				t.Fatal(r)
@@ -243,13 +189,12 @@ func TestFunctionalRegistration(t *testing.T) {
 }
 
 func TestRemove(t *testing.T) {
-	const depName = "test"
-
-	if err := Register(depName, newDB); err != nil {
+	c := New()
+	if err := Register(depName, newDB, WithContainer(c)); err != nil {
 		t.Fatal(err)
 	}
 
-	_, err := Get[any](depName)
+	_, err := Get[any](depName, WithContainer(c))
 
 	assert.NoError(t, err)
 
@@ -261,8 +206,7 @@ func TestRemove(t *testing.T) {
 }
 
 func TestOverride(t *testing.T) {
-	const depName = "test"
-	defer Flush()
+	t.Cleanup(Flush)
 
 	if err := Register(depName, func() int { return 10 }); err != nil {
 		t.Fatal(err)
@@ -281,36 +225,4 @@ func TestOverride(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, 20, v)
-}
-
-func TestTestMode(t *testing.T) {
-	t.Run("get singleton instance on test mode", func(t *testing.T) {
-		TestMode()
-
-		type test struct {
-			number int
-		}
-
-		sym := types.Symbol("test")
-
-		err := Singleton(sym, func() test {
-			return test{number: rand.Int()}
-		})
-
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		obj1, errGet := Get[test](sym)
-		if errGet != nil {
-			t.Fatal(errGet)
-		}
-
-		obj2, errGet2 := Get[test](sym)
-		if errGet2 != nil {
-			t.Fatal(errGet2)
-		}
-
-		assert.NotEqual(t, obj1.number, obj2.number)
-	})
 }

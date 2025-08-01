@@ -4,22 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
-
-	"github.com/Drafteame/container/types"
 )
-
-//go:generate mockery --name=Builder --filename=builder.go --structname=Builder --output=mocks --outpkg=mocks
-//go:generate mockery --name=Container --filename=container.go --structname=Container --output=mocks --outpkg=mocks
-
-// Builder definition for a dependency that should be build on injection time.
-type Builder interface {
-	Build() (any, error)
-}
-
-// Container is a container that holds global dependencies.
-type Container interface {
-	Get(name types.Symbol) (any, error)
-}
 
 // Dependency implementation of dependency.
 type Dependency struct {
@@ -53,17 +38,17 @@ func NewSingleton(constructor any, args ...any) Dependency {
 	}
 }
 
-// IsSingleton returns true if the current dependency will be treated as a shared dependency.
+// IsSingleton returns true if the current dependency is treated as a shared dependency.
 func (d Dependency) IsSingleton() bool { return d.Singleton }
 
-// SetContainer add shared container to the dependency object in order to resolve shared arguments in the
+// SetContainer add a shared container to the dependency object to resolve shared arguments in
 // dependency three.
 func (d Dependency) SetContainer(sc Container) Dependency {
 	d.container = sc
 	return d
 }
 
-// Build It validates the constructor and gets its type. It gets the arguments values for the constructor. It calls the
+// Build It validates the constructor and gets its type. It gets the argument values for the constructor. It calls the
 // constructor with those arguments using reflection (`reflect` package). Finally, it returns a value and an error if
 // any of them is not nil (the error can be returned by one of the dependencies).
 func (d Dependency) Build() (any, error) {
@@ -192,7 +177,7 @@ func (d Dependency) resolveArgument(index int, builder Builder, ctype reflect.Ty
 
 // getValueAndError If the constructor returns no values, we return `nil` and `nil`. If the constructor returns one
 // value, we return that value and `nil`. If the constructor returns more than one value, we take the first as a result
-// and last as an error. We check if last argument is an error (if it's not nil). We return result and error (or just
+// and last as an error. We check if the last argument is an error (if it's not nil). We return result and error (or just
 // nil if there was no error).
 func (d Dependency) getValueAndError(res []reflect.Value) (any, error) {
 	if len(res) == 0 {

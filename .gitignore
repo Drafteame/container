@@ -30,3 +30,5 @@ node_modules/
 config.yml
 go.work.sum
 dist/
+
+flake.lock

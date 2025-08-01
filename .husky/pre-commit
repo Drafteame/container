@@ -1,0 +1,30 @@
+#!/usr/bin/env sh
+
+. "$(dirname "$0")/_/husky.sh"
+
+if [ "$GIT_NV" = "1" ]; then
+  echo "[husky] skipping pre-commit hooks"
+  exit 0
+fi
+
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
+GO_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E "\.go$|go\.(mod|sum|work|work\.sum)$" || true)
+
+if [ -n "$GO_FILES" ]; then
+    sh ./.husky/pre-commit-scripts/golangci-lint.sh || exit 1
+    echo "Running task format..."
+    task format
+    if [ $? -ne 0 ]; then
+        echo "Error: task format failed"
+        exit 1
+    fi
+fi
+
+sh ./.husky/pre-commit-scripts/goimports-reviser.sh && \
+sh ./.husky/pre-commit-scripts/golangci-lint.sh
+
+# shellcheck disable=SC2181
+if [ $? -ne 0 ]; then
+  echo "[husky] commit validation error"
+  exit 1
+fi

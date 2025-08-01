@@ -3,15 +3,17 @@ package container
 import (
 	"fmt"
 	"reflect"
-
-	"github.com/Drafteame/container/types"
 )
 
-// Get is a wrapper over the Get function attached to the global container. This function modify the return type of the
-// resolved dependency, returned as `any` to the provided generic type `T`. If it can't be casted it will return an
+// Get is a wrapper over the Get function attached to the global container. This function modifies the return type of the
+// resolved dependency, returned as `any` to the provided generic type `T`. If it can't be cast it will return an
 // error.
-func Get[T any, K symbolName](name K) (T, error) {
-	instance, err := get().Get(types.Symbol(name))
+func Get[T any](name string, opts ...Option) (T, error) {
+	depOpts := buildOptions(opts...)
+
+	c := depOpts.container
+
+	instance, err := c.Get(name)
 	if err != nil {
 		aux := new(T)
 		return *aux, err
@@ -27,9 +29,13 @@ func Get[T any, K symbolName](name K) (T, error) {
 	return cast, nil
 }
 
-// MustGet Same functionality that Get function but instead of returning error, it panics.
-func MustGet[T any, K symbolName](name K) T {
-	instance, err := get().Get(types.Symbol(name))
+// MustGet Same functionality that Get function, but instead of returning an error, it panics.
+func MustGet[T any](name string, opts ...Option) T {
+	depOpts := buildOptions(opts...)
+
+	c := depOpts.container
+
+	instance, err := c.Get(name)
 	if err != nil {
 		panic(err)
 	}

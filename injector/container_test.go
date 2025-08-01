@@ -6,24 +6,12 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/Drafteame/container/dependency"
-	"github.com/Drafteame/container/types"
 )
 
-func TestContainer_EnableTestMode(t *testing.T) {
-	ic := New()
-	assert.False(t, ic.testMode)
-
-	ic.TestMode()
-
-	assert.True(t, ic.testMode)
-}
-
 func TestContainer_Flush(t *testing.T) {
-	depName := "test"
-
 	ic := New()
 
-	if err := ic.Provide(types.Symbol(depName), dependency.New(func() int { return 10 })); err != nil {
+	if err := ic.Provide(depName, dependency.New(func() int { return 10 })); err != nil {
 		t.Error(err)
 		return
 	}
@@ -35,8 +23,7 @@ func TestContainer_Flush(t *testing.T) {
 }
 
 func TestContainer_Remove(t *testing.T) {
-	depName := types.Symbol("test")
-	depName2 := types.Symbol("test2")
+	depName2 := "test2"
 
 	c := New()
 
@@ -66,8 +53,6 @@ func TestContainer_Remove(t *testing.T) {
 }
 
 func TestContainer_Override(t *testing.T) {
-	depName := types.Symbol("test")
-
 	c := New()
 
 	if err := c.Provide(depName, dependency.NewSingleton(func() int { return 10 })); err != nil {

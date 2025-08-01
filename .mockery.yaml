@@ -1,0 +1,29 @@
+issue-845-fix: True
+
+disable-version-string: True
+
+resolve-type-alias: False
+
+dir: '{{.InterfaceDir}}/mocks'
+
+outpkg: mocks
+
+with-expecter: true
+
+recursive: false
+
+
+exclude:
+  - node_modules
+  - vendor
+  - .git
+  - .husky
+  - .github
+  - .idea
+  - .vscode
+
+packages:
+  github.com/Drafteame/container/dependency:
+    interfaces:
+      Builder: {}
+      Container: {}
