@@ -7,26 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/Drafteame/container/dependency/mocks"
-	"github.com/Drafteame/container/types"
 )
 
 // nolint
 type db interface {
 	client()
 }
-
-// nolint
-type database struct {
-	dbname string
-}
-
-// nolint
-func newDatabase(dbname string) *database {
-	return &database{dbname: dbname}
-}
-
-// nolint
-func (db *database) client() {}
 
 type namer interface {
 	getName() string
@@ -53,11 +39,6 @@ type user struct {
 // nolint
 func newUser(name string, age int) *user {
 	return &user{name: name, age: age}
-}
-
-// nolint
-func newUserConn(conn db) *user {
-	return &user{conn: conn}
 }
 
 // nolint
@@ -427,11 +408,11 @@ func TestDependency_Build(t *testing.T) {
 	})
 
 	t.Run("with injectable dependency", func(t *testing.T) {
-		injectDepName := types.Symbol("inject")
+		injectDepName := string("inject")
 		injectDep := Inject(injectDepName)
 		injectDepValue := "some"
 
-		ic := mocks.NewContainer(t)
+		ic := mocks.NewMockContainer(t)
 		ic.On("Get", injectDepName).Return(injectDepValue, nil)
 
 		injectedValue := ""

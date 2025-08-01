@@ -8,8 +8,19 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/Drafteame/container/dependency"
-	"github.com/Drafteame/container/types"
 )
+
+const depName = "test"
+const userDepName = "usersService"
+
+type user struct {
+	name string
+	age  int
+}
+
+func newUser(name string, age int) (*user, error) {
+	return &user{name: name, age: age}, nil
+}
 
 func TestContainer_Provide(t *testing.T) {
 	t.Run("provide simple dependency", func(t *testing.T) {
@@ -18,7 +29,6 @@ func TestContainer_Provide(t *testing.T) {
 
 		ic := New()
 
-		userDepName := types.Symbol("userDep")
 		userDep := dependency.New(newUser, name, age)
 
 		err := ic.Provide(userDepName, userDep)
@@ -38,7 +48,6 @@ func TestContainer_Provide(t *testing.T) {
 
 		ic := New()
 
-		userDepName := types.Symbol("usersService")
 		userDep := dependency.New(newUser, name, age)
 
 		if err := ic.Provide(userDepName, userDep); err != nil {
@@ -57,7 +66,6 @@ func TestContainer_Provide(t *testing.T) {
 	t.Run("provide dependency with no return value constructor", func(t *testing.T) {
 		ic := New()
 
-		depName := types.Symbol("test")
 		dep := dependency.New(func() {})
 
 		err := ic.Provide(depName, dep)
@@ -68,10 +76,12 @@ func TestContainer_Provide(t *testing.T) {
 	})
 
 	t.Run("provide singleton dependency", func(t *testing.T) {
+		const name = "John Smith"
+		const age = 21
+
 		ic := New()
 
-		depName := types.Symbol("test")
-		dep := dependency.NewSingleton(newDriver, "test")
+		dep := dependency.NewSingleton(newUser, name, age)
 
 		err := ic.Provide(depName, dep)
 
@@ -86,7 +96,6 @@ func TestContainer_Provide(t *testing.T) {
 
 		ic := New()
 
-		userDepName := types.Symbol("usersService")
 		userDep := dependency.NewSingleton(newUser, name, age)
 		if err := ic.Provide(userDepName, userDep); err != nil {
 			t.Error(err)
@@ -104,7 +113,6 @@ func TestContainer_Provide(t *testing.T) {
 	t.Run("provide singleton dependency with no return value constructor", func(t *testing.T) {
 		ic := New()
 
-		depName := types.Symbol("test")
 		dep := dependency.NewSingleton(func() {})
 
 		err := ic.Provide(depName, dep)
@@ -120,10 +128,9 @@ func TestContainer_Provide(t *testing.T) {
 
 		ic := New()
 
-		userDepName := types.Symbol("")
 		userDep := dependency.New(newUser, name, age)
 
-		err := ic.Provide(userDepName, userDep)
+		err := ic.Provide("", userDep)
 
 		expErr := errors.New("inject: dependency name cannot be empty")
 
@@ -137,7 +144,6 @@ func TestContainer_Provide(t *testing.T) {
 
 		ic := &Container{}
 
-		userDepName := types.Symbol("some")
 		userDep := dependency.New(newUser, name, age)
 
 		err := ic.Provide(userDepName, userDep)

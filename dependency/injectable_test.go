@@ -7,11 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/Drafteame/container/dependency/mocks"
-	"github.com/Drafteame/container/types"
 )
 
+const name = "test"
+
 func TestInject(t *testing.T) {
-	name := types.Symbol("test")
+
 	i := Inject(name)
 
 	assert.IsType(t, Injectable{}, i)
@@ -19,16 +20,14 @@ func TestInject(t *testing.T) {
 }
 
 func TestInjectable_IsSingleton(t *testing.T) {
-	name := types.Symbol("test")
 	i := Inject(name)
 
 	assert.False(t, i.IsSingleton())
 }
 
 func TestInjectable_SetContainer(t *testing.T) {
-	ic := mocks.NewContainer(t)
+	ic := mocks.NewMockContainer(t)
 
-	name := types.Symbol("test")
 	i := Inject(name).SetContainer(ic).(Injectable)
 
 	assert.NotNil(t, i.container)
@@ -37,11 +36,10 @@ func TestInjectable_SetContainer(t *testing.T) {
 
 func TestInjectable_Build(t *testing.T) {
 	t.Run("resolve build from container", func(t *testing.T) {
-		depName := types.Symbol("test")
-		dep := Inject(depName)
+		dep := Inject(name)
 
-		ic := mocks.NewContainer(t)
-		ic.On("Get", depName).Return("some", nil)
+		ic := mocks.NewMockContainer(t)
+		ic.On("Get", name).Return("some", nil)
 
 		res, err := dep.SetContainer(ic).Build()
 
@@ -50,8 +48,7 @@ func TestInjectable_Build(t *testing.T) {
 	})
 
 	t.Run("error by empty container", func(t *testing.T) {
-		depName := types.Symbol("test")
-		dep := Inject(depName)
+		dep := Inject(name)
 
 		_, err := dep.Build()
 		expErr := errors.New("inject: [internal-error] no container provided")

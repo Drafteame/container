@@ -1,0 +1,23 @@
+version: '3'
+
+tasks:
+  format:
+    desc: Format all code
+    cmds:
+      - goimports-reviser ./...
+      - golangci-lint fmt ./...
+    silent: true
+
+  lint:
+    desc: Lint all code
+    cmds:
+      - golangci-lint run ./...
+    silent: true
+
+  test:
+    desc: Run all tests
+    cmds:
+      - go test -v -race ./...
+    silent: true
+
+

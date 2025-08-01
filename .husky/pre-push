@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Running pre-push hooks"
+
+# Get only the staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
+
+# Get Go files that are staged
+GO_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E "\.go$|go\.(mod|sum|work|work\.sum)$" || true)
+
+if [ "$GIT_NV" = "1" ]; then
+  echo "[husky] skipping pre-push hooks"
+  exit 0
+fi
+
+sh ./.husky/pre-commit-scripts/go-mod-tidy.sh
+
+if [ $? -ne 0 ]; then
+  echo "[husky] push validation error"
+  exit 1
+fi

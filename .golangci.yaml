@@ -1,0 +1,88 @@
+version: "2"
+
+run:
+  timeout: 2m
+  allow-parallel-runners: true
+  go: '1.24'
+#  build-tags:
+#    - local
+
+formatters:
+  exclusions:
+    paths:
+      - '\\.data/.*'
+      - 'node_modules/.*'
+      - 'vendor/.*'
+      - '.git/.*'
+      - '.husky/.*'
+      - '.github/.*'
+      - '.idea/.*'
+      - '.vscode/.*'
+      - '\\.bin/.*'
+  enable:
+    - gci
+  settings:
+    golines:
+      max-len: 120
+      tab-len: 4
+    gci:
+      sections:
+        - standard
+        - default
+        - blank
+        - dot
+        - alias
+        - localmodule
+        - prefix(github.com/Drafteame/docker-api)
+      no-inline-comments: true
+      no-prefix-comments: true
+      custom-order: true
+      no-lex-order: true
+
+linters:
+  exclusions:
+    paths:
+      - '\\.data/.*'
+      - 'node_modules/.*'
+      - 'vendor/.*'
+      - '.git/.*'
+      - '.husky/.*'
+      - '.github/.*'
+      - '.idea/.*'
+      - '.vscode/.*'
+      - '\\.bin/.*'
+    rules:
+      - path: _test\.go$
+        linters:
+          - gocognit
+          - errcheck
+      - path: .*/test/.*
+        linters:
+          - gocognit
+          - errcheck
+  enable:
+    - exptostd
+    - errcheck
+    - govet
+    - gocognit
+    - goconst
+  settings:
+    errcheck:
+      check-blank: true
+    govet:
+      disable-all: true
+      enable:
+        - buildtag
+        - copylocks
+        - defers
+        - loopclosure
+        - lostcancel
+        - slog
+        - tests
+    gocognit:
+      min-complexity: 15
+    goconst:
+      min-len: 2
+      min-occurrences: 2
+
+

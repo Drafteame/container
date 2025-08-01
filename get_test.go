@@ -6,24 +6,23 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/Drafteame/container/dependency"
-	"github.com/Drafteame/container/types"
 )
+
+const depName = "userTest"
 
 func TestGet(t *testing.T) {
 	t.Run("get instance of specific type by name", func(t *testing.T) {
-		defer Flush()
+		c := New()
 
-		depName := types.Symbol("userTest1")
 		dep := dependency.New(newUser, name, age)
 
-		if err := Register(depName, dep); err != nil {
-			t.Error(err)
-			return
-		}
+		err := Register(depName, dep, WithContainer(c))
+		require.NoError(t, err)
 
-		ui, err := Get[*user](depName)
+		ui, err := Get[*user](depName, WithContainer(c))
 
 		assert.NoError(t, err)
 		assert.NotEmpty(t, ui)
@@ -32,17 +31,14 @@ func TestGet(t *testing.T) {
 	})
 
 	t.Run("get instance from container error", func(t *testing.T) {
-		defer Flush()
+		c := New()
 
-		depName := types.Symbol("userTest2")
 		dep := dependency.New(newUserError, name, age)
 
-		if err := Register(depName, dep); err != nil {
-			t.Error(err)
-			return
-		}
+		err := Register(depName, dep, WithContainer(c))
+		require.NoError(t, err)
 
-		ui, err := Get[*user](string(depName))
+		ui, err := Get[*user](depName, WithContainer(c))
 		expErr := errors.New("inject: error building dependency instance: inject: error constructing `func(string, int) (*container.user, error)`: some error")
 
 		assert.Error(t, err)
@@ -51,18 +47,15 @@ func TestGet(t *testing.T) {
 	})
 
 	t.Run("cast type error", func(t *testing.T) {
-		defer Flush()
+		c := New()
 
-		depName := types.Symbol("userTest3")
 		dep := dependency.New(newUser, name, age)
 
-		if err := Register(depName, dep); err != nil {
-			t.Error(err)
-			return
-		}
+		err := Register(depName, dep, WithContainer(c))
+		require.NoError(t, err)
 
-		ui, err := Get[string](depName)
-		expErr := errors.New("inject: error casting instance of `userTest3` dependency to `string`")
+		ui, err := Get[string](depName, WithContainer(c))
+		expErr := errors.New("inject: error casting instance of `userTest` dependency to `string`")
 
 		assert.Error(t, err)
 		assert.Empty(t, ui)
@@ -72,22 +65,20 @@ func TestGet(t *testing.T) {
 
 func TestMustGet(t *testing.T) {
 	t.Run("get instance of specific type by name", func(t *testing.T) {
-		defer Flush()
+		c := New()
+
 		defer func() {
 			if r := recover(); r != nil {
 				t.Error(r)
 			}
 		}()
 
-		depName := types.Symbol("userTest1")
 		dep := dependency.New(newUser, name, age)
 
-		if err := Register(depName, dep); err != nil {
-			t.Error(err)
-			return
-		}
+		err := Register(depName, dep, WithContainer(c))
+		require.NoError(t, err)
 
-		ui := MustGet[*user](depName)
+		ui := MustGet[*user](depName, WithContainer(c))
 
 		assert.NotEmpty(t, ui)
 		assert.Equal(t, ui.age, age)
@@ -95,7 +86,7 @@ func TestMustGet(t *testing.T) {
 	})
 
 	t.Run("get instance from container error", func(t *testing.T) {
-		defer Flush()
+		c := New()
 		defer func() {
 			r := recover()
 			expErr := errors.New("inject: error building dependency instance: inject: error constructing `func(string, int) (*container.user, error)`: some error")
@@ -103,34 +94,32 @@ func TestMustGet(t *testing.T) {
 			assert.Equal(t, expErr, fmt.Errorf("%v", r))
 		}()
 
-		depName := types.Symbol("userTest2")
 		dep := dependency.New(newUserError, name, age)
 
-		if err := Register(depName, dep); err != nil {
-			t.Error(err)
-			return
-		}
+		err := Register(depName, dep, WithContainer(c))
+		require.NoError(t, err)
 
-		_ = MustGet[*user](string(depName))
+		val := MustGet[*user](depName, WithContainer(c))
+		assert.NotEmpty(t, val)
+		assert.Equal(t, val.age, age)
+		assert.Equal(t, val.name, name)
 	})
 
 	t.Run("cast type error", func(t *testing.T) {
-		defer Flush()
+		c := New()
+
 		defer func() {
 			r := recover()
-			expErr := errors.New("inject: error casting instance of `userTest3` dependency to `string`")
+			expErr := errors.New("inject: error casting instance of `userTest` dependency to `string`")
 
 			assert.Equal(t, expErr, fmt.Errorf("%v", r))
 		}()
 
-		depName := types.Symbol("userTest3")
 		dep := dependency.New(newUser, name, age)
 
-		if err := Register(depName, dep); err != nil {
-			t.Error(err)
-			return
-		}
+		err := Register(depName, dep, WithContainer(c))
+		require.NoError(t, err)
 
-		_ = MustGet[string](depName)
+		_ = MustGet[string](depName, WithContainer(c))
 	})
 }
